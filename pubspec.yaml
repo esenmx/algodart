@@ -12,3 +12,8 @@ environment:
 
 dev_dependencies:
   lints: ^1.0.0
+  test: ^1.20.1
+  test_utils:
+    git:
+      url: https://github.com/esenmx/test_utils
+      ref: main
