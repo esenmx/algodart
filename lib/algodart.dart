@@ -52,7 +52,7 @@ abstract class Algo {
 
   /// https://wikimedia.org/api/rest_v1/media/math/render/svg/fd03ce9abc4557d7190ad05b34a7ab96d3daec45
   /// [z] can be 1~2
-  static double wilsonScoreInterval(int up, int down, {double z = 1.28}) {
+  static double wilsonScoreInterval(int up, int down, {double z = 1.61}) {
     if (up == 0 && down == 0) {
       return 0.0;
     }

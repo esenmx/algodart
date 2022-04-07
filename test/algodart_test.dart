@@ -17,14 +17,16 @@ void main() async {
         greaterThan(Algo.wilsonScoreInterval(0, 0)));
     expect(Algo.wilsonScoreInterval(1, 0),
         greaterThan(Algo.wilsonScoreInterval(1, 1)));
-    expect(Algo.wilsonScoreInterval(101, 0),
-        greaterThan(Algo.wilsonScoreInterval(100, 0)));
-    expect(Algo.wilsonScoreInterval(100, 0),
-        greaterThan(Algo.wilsonScoreInterval(200, 100)));
-    expect(Algo.wilsonScoreInterval(100, 0),
-        greaterThan(Algo.wilsonScoreInterval(101, 1)));
-    expect(Algo.wilsonScoreInterval(100, 0),
-        greaterThan(Algo.wilsonScoreInterval(110, 10)));
+    expect(Algo.wilsonScoreInterval(5, 0),
+        greaterThan(Algo.wilsonScoreInterval(4, 0)));
+    expect(Algo.wilsonScoreInterval(11, 0),
+        greaterThan(Algo.wilsonScoreInterval(10, 0)));
+    expect(Algo.wilsonScoreInterval(10, 0),
+        greaterThan(Algo.wilsonScoreInterval(20, 10)));
+    expect(Algo.wilsonScoreInterval(10, 0),
+        greaterThan(Algo.wilsonScoreInterval(11, 1)));
+    expect(Algo.wilsonScoreInterval(10, 10, z: 1.99),
+        greaterThan(Algo.wilsonScoreInterval(10, 10, z: 2)));
   });
 }
 
