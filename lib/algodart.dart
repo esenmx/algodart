@@ -1,5 +1,7 @@
 library algodart;
 
+import 'dart:math';
+
 abstract class Algo {
   static List<List<MapEntry<T, T>>> roundRobinCircle<T>(List<T> elements,
       [bool rematch = true]) {
@@ -46,5 +48,20 @@ abstract class Algo {
     }
 
     return schedule;
+  }
+
+  /// https://wikimedia.org/api/rest_v1/media/math/render/svg/fd03ce9abc4557d7190ad05b34a7ab96d3daec45
+  /// [z] can be 1~2
+  static double wilsonScoreInterval(int up, int down, {double z = 1.28}) {
+    if (up == 0 && down == 0) {
+      return 0.0;
+    }
+    if (up == 0) {
+      return -wilsonScoreInterval(down, up);
+    }
+    final n = up + down;
+    final p = up / n; // phat
+    return (p + z * z / (2 * n) - z * sqrt(p * (1 - p) + z * z / (4 * n)) / n) /
+        (1 + z * z / n);
   }
 }
