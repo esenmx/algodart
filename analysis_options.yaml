@@ -1,11 +1,1 @@
 include: package:lints/recommended.yaml
-
-linter:
-  rules:
-    # temporarily disabled
-    prefer_function_declarations_over_variables: false
-
-analyzer:
-  exclude:
-    - "**/*.g.dart"
-    - "**/*.freezed.dart"

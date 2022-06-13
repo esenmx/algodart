@@ -19,7 +19,7 @@ abstract class Algo {
         rotation.length * (rematch ? 2 : 1), (index) => <MapEntry<T, T>>[]);
 
     for (int i = 0; i < rotation.length; i++) {
-      final add = (T key, T value) {
+      void add(T key, T value) {
         if (i % 2 == 0) {
           schedule[i].add(MapEntry(key, value));
         } else {
@@ -32,7 +32,8 @@ abstract class Algo {
             schedule[i + rotation.length].add(MapEntry(key, value));
           }
         }
-      };
+      }
+
       final fixedMatch = rotation[i];
       if (fixedMatch != null) {
         add(fixed, fixedMatch);
