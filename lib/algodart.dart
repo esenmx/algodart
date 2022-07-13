@@ -3,15 +3,17 @@ library algodart;
 import 'dart:math';
 
 abstract class Algo {
-  static List<List<MapEntry<T, T>>> roundRobinCircle<T>(List<T> elements,
-      [bool rematch = true]) {
+  static List<List<MapEntry<T, T>>> roundRobinCircle<T>(
+    Set<T> elements, [
+    bool rematch = true,
+  ]) {
     if (elements.length < 2) {
-      throw ArgumentError(elements);
+      throw ArgumentError(elements, 'multiple elements required');
     }
 
-    final fixed = elements[0];
+    final fixed = elements.first;
     final rotation = [
-      ...elements.sublist(1, elements.length),
+      ...elements.subset(1, elements.length),
       if (elements.length % 2 != 0) null
     ];
 
@@ -64,5 +66,16 @@ abstract class Algo {
     final p = up / n; // phat
     return (p + z * z / (2 * n) - z * sqrt(p * (1 - p) + z * z / (4 * n)) / n) /
         (1 + z * z / n);
+  }
+}
+
+extension SetX<E> on Set<E> {
+  Set<E> subset(int start, [int? end]) {
+    RangeError.checkValidRange(start, end, length);
+    final s = <E>{};
+    for (var i = start; i < (end ?? length); i++) {
+      s.add(elementAt(i));
+    }
+    return s;
   }
 }
