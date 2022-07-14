@@ -32,8 +32,8 @@ void main() async {
 
 void _testRoundRobinCircle(List<int> elements, [bool rematch = true]) {
   test('roundRobinCircle(${elements.length}, $rematch)', () {
-    final schedule =
-        Algo.roundRobinCircle(elements.toSet(), rematch).expand((e) => e);
+    final schedule = Algo.roundRobinCircle(elements.toSet(), rematch)
+        .expand((e) => e.entries);
     for (var e in elements) {
       final keys = schedule.fold<int>(0, (pv, v) {
         return pv + (v.key == e ? 1 : 0);

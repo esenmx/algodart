@@ -3,7 +3,7 @@ library algodart;
 import 'dart:math';
 
 abstract class Algo {
-  static List<List<MapEntry<T, T>>> roundRobinCircle<T>(
+  static List<Map<T, T>> roundRobinCircle<T>(
     Set<T> elements, [
     bool rematch = true,
   ]) {
@@ -17,21 +17,20 @@ abstract class Algo {
       if (elements.length % 2 != 0) null
     ];
 
-    final schedule = List<List<MapEntry<T, T>>>.generate(
-        rotation.length * (rematch ? 2 : 1), (index) => <MapEntry<T, T>>[]);
+    final schedule = List<Map<T, T>>.generate(
+        rotation.length * (rematch ? 2 : 1), (index) => <T, T>{});
 
     for (int i = 0; i < rotation.length; i++) {
       void add(T key, T value) {
         if (i % 2 == 0) {
-          schedule[i].add(MapEntry(key, value));
+          schedule[i][key] = value;
+          if (rematch) {
+            schedule[i + rotation.length][value] = key;
+          }
         } else {
-          schedule[i].add(MapEntry(value, key));
-        }
-        if (rematch) {
-          if (i % 2 == 0) {
-            schedule[i + rotation.length].add(MapEntry(value, key));
-          } else {
-            schedule[i + rotation.length].add(MapEntry(key, value));
+          schedule[i][key] = value;
+          if (rematch) {
+            schedule[i + rotation.length][value] = key;
           }
         }
       }
