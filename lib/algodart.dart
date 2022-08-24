@@ -3,48 +3,55 @@ library algodart;
 import 'dart:math';
 
 abstract class Algo {
+  static final _roundRobingCircleRng = Random();
+
   static List<Map<T, T>> roundRobinCircle<T>(
-    Set<T> elements, [
+    List<T> elements, [
     bool rematch = true,
   ]) {
+    assert(
+      elements.length == elements.toSet().length,
+      'teams has duplicate:\n$elements',
+    );
     if (elements.length < 2) {
-      throw ArgumentError(elements, 'multiple elements required');
+      throw ArgumentError(elements, 'multiple teams required');
     }
 
-    final fixed = elements.first;
+    final shuffled = [...elements]..shuffle(_roundRobingCircleRng);
+    final fixed = shuffled.first;
     final rotation = [
-      ...elements.subset(1, elements.length),
-      if (elements.length % 2 != 0) null
+      ...shuffled.where((element) => element != fixed),
+      if (shuffled.length % 2 != 0) null
     ];
 
     final schedule = List<Map<T, T>>.generate(
         rotation.length * (rematch ? 2 : 1), (index) => <T, T>{});
 
     for (int i = 0; i < rotation.length; i++) {
-      void add(T key, T value) {
-        if (i % 2 == 0) {
+      void add(T key, T value, int j) {
+        if (j % 2 == 0) {
           schedule[i][key] = value;
           if (rematch) {
             schedule[i + rotation.length][value] = key;
           }
         } else {
-          schedule[i][key] = value;
+          schedule[i][value] = key;
           if (rematch) {
-            schedule[i + rotation.length][value] = key;
+            schedule[i + rotation.length][key] = value;
           }
         }
       }
 
-      final fixedMatch = rotation[i];
-      if (fixedMatch != null) {
-        add(fixed, fixedMatch);
+      /// Matching for Fixed
+      if (rotation[i] != null) {
+        add(fixed, rotation[i] as T, i);
       }
 
       for (int j = 1; j <= rotation.length ~/ 2; j++) {
         final key = rotation[(i + j) % rotation.length];
         final value = rotation[(i - j) % rotation.length];
         if (key != null && value != null) {
-          add(key, value);
+          add(key, value, j);
         }
       }
     }

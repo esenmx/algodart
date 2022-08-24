@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:algodart/algodart.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/test_utils.dart';
@@ -6,6 +8,10 @@ void main() async {
   group('RoundRobin', () {
     _testRoundRobinCircle(2.range(1), false);
     _testRoundRobinCircle(2.range(1));
+    _testRoundRobinCircle(6.range(1));
+    _testRoundRobinCircle(6.range(1), false);
+    _testRoundRobinCircle(7.range(1));
+    _testRoundRobinCircle(7.range(1), false);
     _testRoundRobinCircle(31.range(1));
     _testRoundRobinCircle(31.range(1), false);
     _testRoundRobinCircle(32.range(1));
@@ -30,21 +36,41 @@ void main() async {
   });
 }
 
-void _testRoundRobinCircle(List<int> elements, [bool rematch = true]) {
-  test('roundRobinCircle(${elements.length}, $rematch)', () {
-    final schedule = Algo.roundRobinCircle(elements.toSet(), rematch)
-        .expand((e) => e.entries);
-    for (var e in elements) {
-      final keys = schedule.fold<int>(0, (pv, v) {
-        return pv + (v.key == e ? 1 : 0);
+void _testRoundRobinCircle(List<int> units, [bool rematch = true]) {
+  test('roundRobinCircle(${units.length}, $rematch)', () {
+    final schedule = Algo.roundRobinCircle(units, rematch);
+    printOnFailure('$units\n${schedule.join('\n')}');
+    final flatSchedule = schedule.expand((e) => e.entries);
+    for (var unit in units) {
+      final lCount = flatSchedule.fold<int>(0, (previousValue, value) {
+        return previousValue + (value.key == unit ? 1 : 0);
       });
-      final values = schedule.fold<int>(0, (pv, v) {
-        return pv + (v.value == e ? 1 : 0);
+      final rCount = flatSchedule.fold<int>(0, (previousValue, value) {
+        return previousValue + (value.value == unit ? 1 : 0);
       });
       if (rematch) {
-        expect(keys, equals(values));
+        expect(
+          lCount,
+          equals(rCount),
+          reason: unit.toString(),
+        );
+        expect(
+          lCount + rCount,
+          equals((units.length - 1) * 2),
+          reason: unit.toString(),
+        );
+      } else {
+        expect(
+          (5).range(max(lCount - 2, 0)),
+          contains(rCount),
+          reason: unit.toString(),
+        );
+        expect(
+          lCount + rCount,
+          equals(units.length - 1),
+          reason: unit.toString(),
+        );
       }
-      expect(keys + values, equals((elements.length - 1) * (rematch ? 2 : 1)));
     }
   });
 }
